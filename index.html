@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parsa Mehrabi — developer</title>
+<meta name="description" content="Parsa Mehrabi — junior full-stack developer building Telegram Mini Apps, bots and websites. TypeScript, React, Node.js, Python.">
+<meta property="og:title" content="Parsa Mehrabi — developer">
+<meta property="og:description" content="Talk to my bot to see my projects, skills and CV.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0e1621; --panel: #17212b; --panel-2: #1f2c3a; --bubble-in: #182533; --bubble-out: #2b5278;
+  --text: #e9eef4; --muted: #7f91a4; --accent: #5eb5f7; --green: #4fce5d; --line: #0b111a;
+  --btn: #22334a; --btn-hover: #2c4462;
+}
+:root[data-theme="light"] {
+  --bg: #d9e4ec; --panel: #ffffff; --panel-2: #f1f4f7; --bubble-in: #ffffff; --bubble-out: #e1ffc7;
+  --text: #0f1419; --muted: #6d7883; --accent: #3390ec; --green: #2ea43a; --line: #dfe5ea;
+  --btn: #e8f1fb; --btn-hover: #d4e6fa;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text);
+  display: flex; justify-content: center; font-size: 15px; line-height: 1.5;
+  background-image: radial-gradient(circle at 20% 10%, rgba(94,181,247,.07), transparent 40%), radial-gradient(circle at 80% 90%, rgba(79,206,93,.06), transparent 40%);
+}
+a { color: var(--accent); }
+button { font: inherit; color: inherit; border: 0; background: none; cursor: pointer; }
+.mono { font-family: 'JetBrains Mono', monospace; }
+
+/* ---------- app shell ---------- */
+.app { width: 100%; max-width: 760px; height: 100dvh; display: flex; flex-direction: column; background: var(--bg); border-inline: 1px solid var(--line); }
+.top { display: flex; align-items: center; gap: 12px; padding: 10px 16px; background: var(--panel); border-bottom: 1px solid var(--line); z-index: 2; }
+.avatar { width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(135deg, #5eb5f7, #8b6cf6); display: grid; place-items: center; font-weight: 700; color: #fff; flex: none; position: relative; }
+.avatar.small { width: 34px; height: 34px; font-size: 13px; }
+.avatar::after { content: ''; position: absolute; right: 1px; bottom: 1px; width: 11px; height: 11px; border-radius: 50%; background: var(--green); border: 2px solid var(--panel); }
+.avatar.small::after { display: none; }
+.who { flex: 1; min-width: 0; }
+.who b { display: flex; align-items: center; gap: 6px; font-size: 16px; }
+.verified { width: 16px; height: 16px; border-radius: 50%; background: var(--accent); display: inline-grid; place-items: center; font-size: 10px; color: #fff; }
+.status { font-size: 13px; color: var(--accent); }
+.top-actions { display: flex; gap: 6px; }
+.icon-btn { padding: 8px 12px; border-radius: 10px; font-size: 13px; color: var(--muted); transition: background .2s, color .2s; }
+.icon-btn:hover { background: var(--panel-2); color: var(--text); }
+
+/* ---------- chat ---------- */
+.chat { flex: 1; overflow-y: auto; padding: 18px 14px 10px; display: flex; flex-direction: column; gap: 6px; scroll-behavior: smooth; }
+.day { align-self: center; background: rgba(0,0,0,.25); color: #fff; font-size: 12px; padding: 3px 10px; border-radius: 12px; margin: 6px 0 10px; }
+:root[data-theme="light"] .day { background: rgba(0,0,0,.12); color: #fff; }
+.row { display: flex; gap: 8px; align-items: flex-end; max-width: 88%; animation: pop .28s ease-out; }
+.row.out { align-self: flex-end; flex-direction: row-reverse; }
+@keyframes pop { from { opacity: 0; transform: translateY(8px) scale(.98); } to { opacity: 1; transform: none; } }
+.bubble { background: var(--bubble-in); padding: 9px 13px 7px; border-radius: 16px 16px 16px 4px; box-shadow: 0 1px 1px rgba(0,0,0,.18); min-width: 60px; overflow-wrap: anywhere; }
+.row.out .bubble { background: var(--bubble-out); border-radius: 16px 16px 4px 16px; }
+.bubble p + p { margin-top: 6px; }
+.meta { display: block; text-align: right; font-size: 11px; color: var(--muted); margin-top: 2px; }
+.row.out .meta::after { content: ' ✓✓'; color: var(--accent); }
+.bubble h3 { font-size: 15px; margin-bottom: 4px; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.tag { font-size: 12px; padding: 2px 9px; border-radius: 99px; background: var(--panel-2); color: var(--text); }
+.card { border-left: 3px solid var(--accent); padding-left: 10px; margin-top: 8px; }
+.card + .card { margin-top: 14px; }
+.card .sub { color: var(--muted); font-size: 13px; }
+.links { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 6px; font-size: 13px; font-weight: 600; }
+.bar { height: 6px; border-radius: 99px; background: var(--panel-2); overflow: hidden; margin-top: 3px; }
+.bar i { display: block; height: 100%; background: linear-gradient(90deg, var(--accent), #8b6cf6); border-radius: inherit; width: 0; transition: width 1s ease-out .2s; }
+.skill { margin-top: 8px; font-size: 13px; }
+.skill span { color: var(--muted); float: right; }
+.inline-kb { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px; margin-top: 6px; max-width: 88%; }
+.inline-kb a, .inline-kb button { display: block; text-align: center; padding: 9px; border-radius: 10px; background: rgba(94,181,247,.12); color: var(--accent); font-size: 14px; font-weight: 500; text-decoration: none; transition: background .2s; }
+.inline-kb a:hover, .inline-kb button:hover { background: rgba(94,181,247,.22); }
+.typing { display: inline-flex; gap: 4px; padding: 6px 2px; }
+.typing i { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); animation: blink 1.2s infinite; }
+.typing i:nth-child(2) { animation-delay: .2s; } .typing i:nth-child(3) { animation-delay: .4s; }
+@keyframes blink { 0%, 80%, 100% { opacity: .3; } 40% { opacity: 1; } }
+.term { background: #0b0f14; color: #b6f3a8; border-radius: 10px; padding: 10px 12px; font-size: 12.5px; margin-top: 8px; white-space: pre-wrap; }
+
+/* ---------- keyboard ---------- */
+.kb { background: var(--panel); border-top: 1px solid var(--line); padding: 8px 10px 10px; }
+.kb-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.kb-grid button { background: var(--btn); padding: 11px 6px; border-radius: 10px; font-size: 14px; font-weight: 500; transition: background .2s, transform .1s; }
+.kb-grid button:hover { background: var(--btn-hover); }
+.kb-grid button:active { transform: scale(.97); }
+.composer { display: flex; gap: 8px; margin-top: 8px; }
+.composer input { flex: 1; background: var(--panel-2); border: 0; border-radius: 22px; padding: 11px 16px; color: var(--text); font: inherit; outline: none; }
+.composer button { width: 44px; height: 44px; border-radius: 50%; background: var(--accent); color: #fff; font-size: 18px; flex: none; }
+
+/* ---------- classic view ---------- */
+.classic { display: none; overflow-y: auto; flex: 1; padding: 28px 22px 60px; }
+.classic.on { display: block; }
+.classic h1 { font-size: 34px; line-height: 1.15; margin-bottom: 6px; }
+.classic h2 { font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 34px 0 12px; }
+.classic .lead { color: var(--muted); font-size: 16px; }
+.classic .card { background: var(--panel); border-radius: 12px; padding: 14px 16px; border-left: 3px solid var(--accent); }
+.classic .btns { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+.classic .btns a { padding: 10px 16px; border-radius: 10px; background: var(--btn); color: var(--text); text-decoration: none; font-weight: 500; font-size: 14px; }
+.classic .btns a.primary { background: var(--accent); color: #fff; }
+.classic ul { padding-left: 18px; margin-top: 6px; } .classic li { margin: 3px 0; }
+
+@media (max-width: 560px) {
+  .kb-grid { grid-template-columns: repeat(2, 1fr); }
+  .row { max-width: 94%; }
+  .icon-btn .lbl { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="avatar">PM</div>
+    <div class="who">
+      <b>Parsa Mehrabi <span class="verified">✓</span></b>
+      <div class="status" id="status">bot · online</div>
+    </div>
+    <div class="top-actions">
+      <button class="icon-btn" id="viewBtn" title="switch view">📄 <span class="lbl">normal view</span></button>
+      <button class="icon-btn" id="themeBtn" title="theme">🌓</button>
+    </div>
+  </header>
+
+  <main class="chat" id="chat" aria-live="polite"></main>
+
+  <section class="classic" id="classic"></section>
+
+  <footer class="kb" id="kb">
+    <div class="kb-grid">
+      <button data-cmd="about">👋 About me</button>
+      <button data-cmd="projects">🚀 Projects</button>
+      <button data-cmd="skills">🛠 Skills</button>
+      <button data-cmd="cv">📄 My CV</button>
+      <button data-cmd="contact">📬 Contact</button>
+      <button data-cmd="fun">🎲 Surprise me</button>
+    </div>
+    <form class="composer" id="composer">
+      <input id="msg" placeholder="Message… (try /projects or 'hire')" autocomplete="off" aria-label="message">
+      <button aria-label="send">➤</button>
+    </form>
+  </footer>
+</div>
+
+<script>
+// ---------- content ----------
+const ME = {
+  github: 'https://github.com/Parsita043',
+  linkedin: 'https://www.linkedin.com/in/parsa-mehrabi-6298983a4/',
+  email: 'parsa.mehrabisharif@gmail.com',
+  cv: 'Parsa_Mehrabi_CV.pdf',
+};
+
+const PROJECTS = [
+  { emoji: '💰', name: 'AMB Wallet', sub: 'Telegram crypto wallet & exchange Mini App', tags: ['TypeScript','Node.js','React','SQLite','Payment API'],
+    text: 'Users deposit, withdraw, swap and gift crypto inside Telegram. Real multi-currency deposits with per-user addresses, live fees and swap quotes through a payment API, an internal ledger, a cheque/gift system and an internal API other bots use to credit balances.',
+    links: [['🔒 code is private (real money)', null]] },
+  { emoji: '🐶', name: 'DOGS Miner', sub: 'Telegram Mini App tap-to-earn game', tags: ['React','TypeScript','Express','Prisma','TON'],
+    text: 'Tap and idle-mining game with a miner shop, tasks, referrals and rewarded ads. Game state is server-authoritative (anti-cheat) and withdrawals credit straight into AMB Wallet.',
+    links: [['GitHub ↗', 'https://github.com/Parsita043/dogs-miner']] },
+  { emoji: '👗', name: 'kiki christina', sub: 'Fashion e-commerce website', tags: ['PHP','PDO','JavaScript','CSS'],
+    text: 'Online store for a fashion brand: filters and sorting, product pages, a persistent shopping bag and secure accounts (hashed passwords, prepared statements).',
+    links: [['GitHub ↗', 'https://github.com/Parsita043/kiki-christina']] },
+  { emoji: '🎁', name: 'Gift Deal Alerts', sub: 'Python Telegram bot', tags: ['Python','Telegram API','Termux'],
+    text: 'Watches the Telegram NFT gift resale market and posts underpriced deals to a channel. Runs 24/7 on an Android phone — zero server cost.',
+    links: [] },
+];
+
+const SKILLS = [
+  ['TypeScript / JavaScript', 85], ['Node.js + Express', 85], ['React + Vite', 75],
+  ['Python', 75], ['Telegram Bot & Mini App APIs', 90], ['SQL (SQLite, Prisma)', 70], ['PHP', 60],
+];
+
+const FUN = [
+  'Fun fact: I speak 4.5 languages — Persian, Spanish, Catalan, English… and a little Chinese (你好 👋).',
+  'I once hosted a bot 24/7 on my phone because I didn\'t want to pay for a server. It worked. 📱',
+  'My debugging process: 1) it works ✅ 2) why does it work? 3) it stopped working 4) coffee ☕',
+  'This whole website is a fake Telegram chat. Yes, I build Telegram stuff even for my CV. 🤖',
+  'I fixed a payment API bug by realising it rejected axios but accepted Node\'s native https. 24 hours of my life. 🫠',
+];
+
+// ---------- helpers ----------
+const chat = document.getElementById('chat');
+const statusEl = document.getElementById('status');
+const esc = s => s.replace(/[&<>"]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
+const now = () => new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+const wait = ms => new Promise(r => setTimeout(r, ms));
+let busy = false;
+
+function addRow(html, out = false) {
+  const row = document.createElement('div');
+  row.className = 'row' + (out ? ' out' : '');
+  row.innerHTML = (out ? '' : '<div class="avatar small">PM</div>') + `<div class="bubble">${html}<span class="meta">${now()}</span></div>`;
+  chat.appendChild(row);
+  chat.scrollTop = chat.scrollHeight;
+  requestAnimationFrame(() => row.querySelectorAll('.bar i').forEach(i => i.style.width = i.dataset.w + '%'));
+  return row;
+}
+function addKb(buttons) {
+  const kb = document.createElement('div');
+  kb.className = 'inline-kb';
+  kb.innerHTML = buttons.map(([label, target]) => target.startsWith('cmd:')
+    ? `<button data-cmd="${target.slice(4)}">${label}</button>`
+    : `<a href="${target}" target="_blank" rel="noopener">${label}</a>`).join('');
+  chat.appendChild(kb);
+  chat.scrollTop = chat.scrollHeight;
+}
+async function botSay(html, delay = 650) {
+  statusEl.textContent = 'typing…';
+  const t = addRow('<span class="typing"><i></i><i></i><i></i></span>');
+  await wait(delay);
+  t.remove();
+  statusEl.textContent = 'bot · online';
+  return addRow(html);
+}
+
+// ---------- replies ----------
+const replies = {
+  async start() {
+    await botSay(`<p>Hey! 👋 I'm <b>Parsa's bot</b>.</p><p>Parsa is a junior full-stack developer from Spain who builds <b>Telegram Mini Apps, bots and websites</b> — real ones, used by real people.</p>`, 500);
+    await botSay(`<p>Tap a button below or type a command like <span class="mono">/projects</span>. Recruiter in a hurry? Hit <b>📄 normal view</b> at the top.</p>`, 700);
+  },
+  async about() {
+    await botSay(`<h3>👋 About Parsa</h3>
+      <p>Self-taught developer based in <b>Jerez de la Frontera, Spain</b>, currently finishing Bachillerato.</p>
+      <p>I design, build and run full products on my own: React front ends, Node.js/TypeScript and Python back ends, databases, payment APIs and deployment.</p>
+      <p>Looking for a <b>part-time remote junior role, internship or freelance work</b>.</p>
+      <div class="tags"><span class="tag">🇮🇷 Persian</span><span class="tag">🇪🇸 Spanish</span><span class="tag">Catalan</span><span class="tag">🇬🇧 English B2</span><span class="tag">🇨🇳 Chinese A1</span></div>`);
+    addKb([['🚀 See projects', 'cmd:projects'], ['📬 Contact', 'cmd:contact']]);
+  },
+  async projects() {
+    await botSay(`<h3>🚀 Projects</h3><p>Things I've built and shipped:</p>` + PROJECTS.map(p => `
+      <div class="card"><b>${p.emoji} ${p.name}</b><div class="sub">${p.sub}</div><p>${p.text}</p>
+      <div class="tags">${p.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+      <div class="links">${p.links.map(([l, u]) => u ? `<a href="${u}" target="_blank" rel="noopener">${l}</a>` : `<span style="color:var(--muted)">${l}</span>`).join('')}</div></div>`).join(''), 900);
+    addKb([['🐙 All my GitHub', ME.github], ['🛠 Skills', 'cmd:skills']]);
+  },
+  async skills() {
+    await botSay(`<h3>🛠 Skills</h3>` + SKILLS.map(([n, w]) => `<div class="skill">${n}<span>${w}%</span><div class="bar"><i data-w="${w}"></i></div></div>`).join('') +
+      `<div class="tags" style="margin-top:12px"><span class="tag">Git</span><span class="tag">REST APIs</span><span class="tag">Docker basics</span><span class="tag">TON</span><span class="tag">Linux / Termux</span></div>`);
+  },
+  async cv() {
+    await botSay(`<h3>📄 CV</h3><p>Here's my latest CV — one page of projects, skills and education.</p>`);
+    addKb([['⬇️ Download PDF', ME.cv], ['💼 LinkedIn', ME.linkedin]]);
+  },
+  async contact() {
+    await botSay(`<h3>📬 Contact</h3><p>Best way to reach me is email. I usually reply within a day.</p><p class="mono">${ME.email}</p>`);
+    addKb([['✉️ Send email', 'mailto:' + ME.email], ['💼 LinkedIn', ME.linkedin], ['🐙 GitHub', ME.github], ['📄 CV', ME.cv]]);
+  },
+  async fun() { await botSay(FUN[Math.floor(Math.random() * FUN.length)]); },
+  async hire() {
+    await botSay(`<p>Excellent decision. 😎</p><div class="term">$ parsa --status\n✓ available: part-time / remote\n✓ stack: TS · React · Node · Python\n✓ ships real products\n✓ timezone: CET (Spain)</div>`);
+    addKb([['✉️ Email Parsa', 'mailto:' + ME.email + '?subject=Hi%20Parsa'], ['📄 CV', ME.cv]]);
+  },
+  async help() { await botSay(`<p>Commands: <span class="mono">/about /projects /skills /cv /contact /fun /hire</span></p>`); },
+  async unknown(text) {
+    await botSay(`<p>🤔 I'm a simple bot and don't understand "<i>${esc(text.slice(0, 40))}</i>" yet.</p><p>Try <span class="mono">/projects</span>, <span class="mono">/cv</span> or <span class="mono">hire</span>.</p>`);
+  },
+};
+
+const LABELS = { about: '👋 About me', projects: '🚀 Projects', skills: '🛠 Skills', cv: '📄 My CV', contact: '📬 Contact', fun: '🎲 Surprise me', hire: 'hire', help: '/help' };
+const KEYWORDS = [[/hire|job|work|recruit/, 'hire'], [/project|built|portfolio|github/, 'projects'], [/skill|stack|tech/, 'skills'], [/cv|resume|curr/, 'cv'], [/contact|email|mail|reach/, 'contact'], [/about|who|you/, 'about'], [/fun|joke|surprise|random/, 'fun'], [/help|start|menu/, 'help']];
+
+async function run(cmd, label) {
+  if (busy) return; busy = true;
+  addRow(esc(label), true);
+  await (replies[cmd] ? replies[cmd]() : replies.unknown(label));
+  busy = false;
+}
+
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-cmd]');
+  if (b) run(b.dataset.cmd, LABELS[b.dataset.cmd] || b.textContent);
+});
+document.getElementById('composer').addEventListener('submit', e => {
+  e.preventDefault();
+  const input = document.getElementById('msg'), text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  const lower = text.toLowerCase().replace(/^\//, '');
+  const hit = replies[lower] && lower !== 'unknown' ? lower : (KEYWORDS.find(([re]) => re.test(lower)) || [])[1];
+  if (busy) return;
+  busy = true; addRow(esc(text), true);
+  (hit ? replies[hit]() : replies.unknown(text)).then(() => busy = false);
+});
+
+// ---------- classic view ----------
+document.getElementById('classic').innerHTML = `
+  <div class="avatar" style="width:64px;height:64px;font-size:22px;margin-bottom:16px">PM</div>
+  <h1>Parsa Mehrabi</h1>
+  <p class="lead">Junior full-stack developer — Telegram Mini Apps, bots & websites. Jerez de la Frontera, Spain. Open to part-time remote roles, internships and freelance.</p>
+  <div class="btns"><a class="primary" href="${ME.cv}" target="_blank">Download CV</a><a href="${ME.github}" target="_blank" rel="noopener">GitHub</a><a href="${ME.linkedin}" target="_blank" rel="noopener">LinkedIn</a><a href="mailto:${ME.email}">Email</a></div>
+  <h2>Projects</h2>
+  ${PROJECTS.map(p => `<div class="card" style="margin-bottom:12px"><b>${p.emoji} ${p.name}</b> <span class="sub">— ${p.sub}</span><p style="margin-top:6px">${p.text}</p><div class="tags">${p.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div><div class="links">${p.links.map(([l, u]) => u ? `<a href="${u}" target="_blank" rel="noopener">${l}</a>` : `<span style="color:var(--muted)">${l}</span>`).join('')}</div></div>`).join('')}
+  <h2>Skills</h2>
+  <p>${SKILLS.map(s => s[0]).join(' · ')} · Git · REST APIs · TON</p>
+  <h2>Education</h2>
+  <ul><li>Bachillerato (2nd year) — IES Almunia, Jerez de la Frontera</li><li>Bachillerato (1st year) — Institut Joanot Martorell, Esplugues de Llobregat</li><li>ESO — Institut Severo Ochoa, 2021–2025</li></ul>
+  <h2>Languages</h2>
+  <p>Persian (native) · Spanish (fluent) · Catalan (fluent) · English (B2) · Chinese (A1)</p>`;
+
+const viewBtn = document.getElementById('viewBtn');
+viewBtn.addEventListener('click', () => {
+  const classic = document.getElementById('classic').classList.toggle('on');
+  chat.style.display = classic ? 'none' : '';
+  document.getElementById('kb').style.display = classic ? 'none' : '';
+  viewBtn.innerHTML = classic ? '💬 <span class="lbl">chat view</span>' : '📄 <span class="lbl">normal view</span>';
+});
+
+// ---------- theme ----------
+const root = document.documentElement;
+try { if (localStorage.getItem('theme') === 'light') root.dataset.theme = 'light'; } catch {}
+document.getElementById('themeBtn').addEventListener('click', () => {
+  root.dataset.theme = root.dataset.theme === 'light' ? '' : 'light';
+  try { localStorage.setItem('theme', root.dataset.theme); } catch {}
+});
+
+// ---------- go ----------
+chat.innerHTML = `<div class="day">today</div>`;
+replies.start();
+</script>
+</body>
+</html>
