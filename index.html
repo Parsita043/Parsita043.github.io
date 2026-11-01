@@ -102,6 +102,37 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
 .classic .btns a.primary { background: var(--accent); color: #fff; }
 .classic ul { padding-left: 18px; margin-top: 6px; } .classic li { margin: 3px 0; }
 
+
+/* ---------- animated ("premium") emoji ---------- */
+.ae { width: 1.3em; height: 1.3em; vertical-align: -0.3em; display: inline-block; object-fit: contain; }
+.kb-grid .ae, .inline-kb .ae { width: 1.45em; height: 1.45em; vertical-align: -0.38em; margin-right: 2px; }
+h3 .ae { width: 1.4em; height: 1.4em; }
+.row.sticker .bubble { background: none; box-shadow: none; padding: 0; }
+.row.sticker .meta { display: inline-block; background: rgba(0,0,0,.35); color: #fff; padding: 1px 8px; border-radius: 10px; }
+.sticker-img { width: 150px; height: 150px; display: block; }
+
+/* ---------- moving background ---------- */
+.stage { position: relative; flex: 1; min-height: 0; display: flex; flex-direction: column; overflow: hidden; }
+.stage > .chat, .stage > .classic { position: relative; z-index: 1; flex: 1; }
+.bg { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; background: var(--bg); }
+.blob { position: absolute; width: 70%; aspect-ratio: 1; border-radius: 50%; filter: blur(70px); opacity: .55; mix-blend-mode: screen; }
+.blob.b1 { background: #2b6cb0; top: -20%; left: -20%; animation: drift1 18s ease-in-out infinite alternate; }
+.blob.b2 { background: #6b46c1; top: 30%; right: -30%; animation: drift2 22s ease-in-out infinite alternate; }
+.blob.b3 { background: #0f8f7a; bottom: -30%; left: 10%; animation: drift3 20s ease-in-out infinite alternate; }
+.blob.b4 { background: #b04a8a; top: 10%; left: 30%; width: 45%; opacity: .35; animation: drift4 26s ease-in-out infinite alternate; }
+:root[data-theme="light"] .blob { mix-blend-mode: multiply; opacity: .35; }
+:root[data-theme="light"] .blob.b1 { background: #9ad0f5; } :root[data-theme="light"] .blob.b2 { background: #c9b8f7; }
+:root[data-theme="light"] .blob.b3 { background: #a8ecd6; } :root[data-theme="light"] .blob.b4 { background: #f6c6e0; }
+@keyframes drift1 { to { transform: translate(35%, 30%) scale(1.15); } }
+@keyframes drift2 { to { transform: translate(-40%, -20%) scale(.9); } }
+@keyframes drift3 { to { transform: translate(25%, -35%) scale(1.2); } }
+@keyframes drift4 { to { transform: translate(-30%, 40%) scale(1.3); } }
+.pattern { position: absolute; inset: -400px; opacity: .09; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M30 40l-12 12 12 12M54 40l12 12-12 12M46 36l-8 32'/%3E%3Cpath d='M150 30l40 16-40 16 8-16z'/%3E%3Cpath d='M190 46h-32'/%3E%3Cpath d='M60 150l8-22 8 22-22-14h28z'/%3E%3Cpath d='M170 130l-10 22h14l-10 22'/%3E%3Ccircle cx='120' cy='110' r='10'/%3E%3Cpath d='M112 104l16 12M128 104l-16 12'/%3E%3Cpath d='M30 210c0-10 8-14 14-8 6-6 14-2 14 8 0 8-14 16-14 16s-14-8-14-16z'/%3E%3Cpath d='M150 200h40v24h-40zM158 200v-8h24v8'/%3E%3Cpath d='M100 20h20M110 10v20'/%3E%3Cpath d='M210 100h18M219 91v18'/%3E%3C/svg%3E"); background-size: 240px 240px; animation: pan 60s linear infinite; }
+:root[data-theme="light"] .pattern { opacity: .12; filter: invert(1); }
+@keyframes pan { to { transform: translate(240px, 240px); } }
+.chat { background: transparent; }
+.top, .kb { position: relative; z-index: 2; }
+
 @media (max-width: 560px) {
   .kb-grid { grid-template-columns: repeat(2, 1fr); }
   .row { max-width: 94%; }
@@ -119,22 +150,24 @@ button { font: inherit; color: inherit; border: 0; background: none; cursor: poi
       <div class="status" id="status">bot · online</div>
     </div>
     <div class="top-actions">
-      <button class="icon-btn" id="viewBtn" title="switch view">📄 <span class="lbl">normal view</span></button>
+      <button class="icon-btn" id="viewBtn" title="switch view">👀 <span class="lbl">normal view</span></button>
       <button class="icon-btn" id="themeBtn" title="theme">🌓</button>
     </div>
   </header>
 
-  <main class="chat" id="chat" aria-live="polite"></main>
-
-  <section class="classic" id="classic"></section>
+  <div class="stage">
+    <div class="bg" aria-hidden="true"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div><div class="blob b4"></div><div class="pattern"></div></div>
+    <main class="chat" id="chat" aria-live="polite"></main>
+    <section class="classic" id="classic"></section>
+  </div>
 
   <footer class="kb" id="kb">
     <div class="kb-grid">
       <button data-cmd="about">👋 About me</button>
       <button data-cmd="projects">🚀 Projects</button>
       <button data-cmd="skills">🛠 Skills</button>
-      <button data-cmd="cv">📄 My CV</button>
-      <button data-cmd="contact">📬 Contact</button>
+      <button data-cmd="cv">🎓 My CV</button>
+      <button data-cmd="contact">💬 Contact</button>
       <button data-cmd="fun">🎲 Surprise me</button>
     </div>
     <form class="composer" id="composer">
@@ -154,13 +187,13 @@ const ME = {
 };
 
 const PROJECTS = [
-  { emoji: '💰', name: 'AMB Wallet', sub: 'Telegram crypto wallet & exchange Mini App', tags: ['TypeScript','Node.js','React','SQLite','Payment API'],
+  { emoji: '💸', name: 'AMB Wallet', sub: 'Telegram crypto wallet & exchange Mini App', tags: ['TypeScript','Node.js','React','SQLite','Payment API'],
     text: 'Users deposit, withdraw, swap and gift crypto inside Telegram. Real multi-currency deposits with per-user addresses, live fees and swap quotes through a payment API, an internal ledger, a cheque/gift system and an internal API other bots use to credit balances.',
     links: [['🔒 code is private (real money)', null]] },
-  { emoji: '🐶', name: 'DOGS Miner', sub: 'Telegram Mini App tap-to-earn game', tags: ['React','TypeScript','Express','Prisma','TON'],
+  { emoji: '🐕', name: 'DOGS Miner', sub: 'Telegram Mini App tap-to-earn game', tags: ['React','TypeScript','Express','Prisma','TON'],
     text: 'Tap and idle-mining game with a miner shop, tasks, referrals and rewarded ads. Game state is server-authoritative (anti-cheat) and withdrawals credit straight into AMB Wallet.',
     links: [['GitHub ↗', 'https://github.com/Parsita043/dogs-miner']] },
-  { emoji: '👗', name: 'kiki christina', sub: 'Fashion e-commerce website', tags: ['PHP','PDO','JavaScript','CSS'],
+  { emoji: '👠', name: 'kiki christina', sub: 'Fashion e-commerce website', tags: ['PHP','PDO','JavaScript','CSS'],
     text: 'Online store for a fashion brand: filters and sorting, product pages, a persistent shopping bag and secure accounts (hashed passwords, prepared statements).',
     links: [['GitHub ↗', 'https://github.com/Parsita043/kiki-christina']] },
   { emoji: '🎁', name: 'Gift Deal Alerts', sub: 'Python Telegram bot', tags: ['Python','Telegram API','Termux'],
@@ -175,11 +208,33 @@ const SKILLS = [
 
 const FUN = [
   'Fun fact: I speak 4.5 languages — Persian, Spanish, Catalan, English… and a little Chinese (你好 👋).',
-  'I once hosted a bot 24/7 on my phone because I didn\'t want to pay for a server. It worked. 📱',
+  'I once hosted a bot 24/7 on my phone because I didn\'t want to pay for a server. It worked. 💡',
   'My debugging process: 1) it works ✅ 2) why does it work? 3) it stopped working 4) coffee ☕',
   'This whole website is a fake Telegram chat. Yes, I build Telegram stuff even for my CV. 🤖',
   'I fixed a payment API bug by realising it rejected axios but accepted Node\'s native https. 24 hours of my life. 🫠',
 ];
+
+
+// ---------- animated ("premium") emoji ----------
+const AE = {'👋':'1f44b','🚀':'1f680','🛠':'1f6e0_fe0f','🎓':'1f393','💬':'1f4ac','🎲':'1f3b2','💸':'1f4b8','🐕':'1f415','👠':'1f460','🎁':'1f381','🤖':'1f916','😎':'1f60e','🤔':'1f914','✨':'2728','🔥':'1f525','🥳':'1f973','☕':'2615','🫠':'1fae0','🔒':'1f512','✅':'2705','👀':'1f440','💡':'1f4a1','🎉':'1f389','💻':'1f4bb','🐙':'1f419','🤝':'1f91d','🌍':'1f30d','🧠':'1f9e0','💯':'1f4af','⚡':'26a1'};
+const AE_RE = new RegExp('(' + Object.keys(AE).map(k => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|') + ')️?', 'g');
+const aeUrl = code => `https://fonts.gstatic.com/s/e/notoemoji/latest/${code}/512.webp`;
+function animoji(root) {
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode: n => n.parentElement.closest('script, style, input, textarea, .term') ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT });
+  const nodes = []; while (walker.nextNode()) { AE_RE.lastIndex = 0; if (AE_RE.test(walker.currentNode.nodeValue)) nodes.push(walker.currentNode); }
+  nodes.forEach(node => {
+    AE_RE.lastIndex = 0;
+    const frag = document.createDocumentFragment(); let last = 0, m; const text = node.nodeValue;
+    while ((m = AE_RE.exec(text))) {
+      frag.append(text.slice(last, m.index));
+      const ch = m[1], img = document.createElement('img');
+      img.className = 'ae'; img.alt = ch; img.src = aeUrl(AE[ch]); img.loading = 'lazy';
+      img.onerror = () => img.replaceWith(ch);
+      frag.append(img); last = m.index + m[0].length;
+    }
+    frag.append(text.slice(last)); node.replaceWith(frag);
+  });
+}
 
 // ---------- helpers ----------
 const chat = document.getElementById('chat');
@@ -194,6 +249,7 @@ function addRow(html, out = false) {
   row.className = 'row' + (out ? ' out' : '');
   row.innerHTML = (out ? '' : '<div class="avatar small">PM</div>') + `<div class="bubble">${html}<span class="meta">${now()}</span></div>`;
   chat.appendChild(row);
+  animoji(row);
   chat.scrollTop = chat.scrollHeight;
   requestAnimationFrame(() => row.querySelectorAll('.bar i').forEach(i => i.style.width = i.dataset.w + '%'));
   return row;
@@ -205,6 +261,7 @@ function addKb(buttons) {
     ? `<button data-cmd="${target.slice(4)}">${label}</button>`
     : `<a href="${target}" target="_blank" rel="noopener">${label}</a>`).join('');
   chat.appendChild(kb);
+  animoji(kb);
   chat.scrollTop = chat.scrollHeight;
 }
 async function botSay(html, delay = 650) {
@@ -219,8 +276,10 @@ async function botSay(html, delay = 650) {
 // ---------- replies ----------
 const replies = {
   async start() {
+    const st = addRow(`<img class="sticker-img" src="${aeUrl('1f44b')}" alt="" onerror="this.closest('.row').remove()">`); st.classList.add('sticker');
+    await wait(500);
     await botSay(`<p>Hey! 👋 I'm <b>Parsa's bot</b>.</p><p>Parsa is a junior full-stack developer from Spain who builds <b>Telegram Mini Apps, bots and websites</b> — real ones, used by real people.</p>`, 500);
-    await botSay(`<p>Tap a button below or type a command like <span class="mono">/projects</span>. Recruiter in a hurry? Hit <b>📄 normal view</b> at the top.</p>`, 700);
+    await botSay(`<p>Tap a button below or type a command like <span class="mono">/projects</span>. Recruiter in a hurry? Hit <b>👀 normal view</b> at the top.</p>`, 700);
   },
   async about() {
     await botSay(`<h3>👋 About Parsa</h3>
@@ -228,7 +287,7 @@ const replies = {
       <p>I design, build and run full products on my own: React front ends, Node.js/TypeScript and Python back ends, databases, payment APIs and deployment.</p>
       <p>Looking for a <b>part-time remote junior role, internship or freelance work</b>.</p>
       <div class="tags"><span class="tag">🇮🇷 Persian</span><span class="tag">🇪🇸 Spanish</span><span class="tag">Catalan</span><span class="tag">🇬🇧 English B2</span><span class="tag">🇨🇳 Chinese A1</span></div>`);
-    addKb([['🚀 See projects', 'cmd:projects'], ['📬 Contact', 'cmd:contact']]);
+    addKb([['🚀 See projects', 'cmd:projects'], ['💬 Contact', 'cmd:contact']]);
   },
   async projects() {
     await botSay(`<h3>🚀 Projects</h3><p>Things I've built and shipped:</p>` + PROJECTS.map(p => `
@@ -242,17 +301,17 @@ const replies = {
       `<div class="tags" style="margin-top:12px"><span class="tag">Git</span><span class="tag">REST APIs</span><span class="tag">Docker basics</span><span class="tag">TON</span><span class="tag">Linux / Termux</span></div>`);
   },
   async cv() {
-    await botSay(`<h3>📄 CV</h3><p>Here's my latest CV — one page of projects, skills and education.</p>`);
-    addKb([['⬇️ Download PDF', ME.cv], ['💼 LinkedIn', ME.linkedin]]);
+    await botSay(`<h3>🎓 CV</h3><p>Here's my latest CV — one page of projects, skills and education.</p>`);
+    addKb([['✨ Download PDF', ME.cv], ['🤝 LinkedIn', ME.linkedin]]);
   },
   async contact() {
-    await botSay(`<h3>📬 Contact</h3><p>Best way to reach me is email. I usually reply within a day.</p><p class="mono">${ME.email}</p>`);
-    addKb([['✉️ Send email', 'mailto:' + ME.email], ['💼 LinkedIn', ME.linkedin], ['🐙 GitHub', ME.github], ['📄 CV', ME.cv]]);
+    await botSay(`<h3>💬 Contact</h3><p>Best way to reach me is email. I usually reply within a day.</p><p class="mono">${ME.email}</p>`);
+    addKb([['💬 Send email', 'mailto:' + ME.email], ['🤝 LinkedIn', ME.linkedin], ['🐙 GitHub', ME.github], ['🎓 CV', ME.cv]]);
   },
   async fun() { await botSay(FUN[Math.floor(Math.random() * FUN.length)]); },
   async hire() {
-    await botSay(`<p>Excellent decision. 😎</p><div class="term">$ parsa --status\n✓ available: part-time / remote\n✓ stack: TS · React · Node · Python\n✓ ships real products\n✓ timezone: CET (Spain)</div>`);
-    addKb([['✉️ Email Parsa', 'mailto:' + ME.email + '?subject=Hi%20Parsa'], ['📄 CV', ME.cv]]);
+    await botSay(`<p>Excellent decision. 😎🔥</p><div class="term">$ parsa --status\n✓ available: part-time / remote\n✓ stack: TS · React · Node · Python\n✓ ships real products\n✓ timezone: CET (Spain)</div>`);
+    addKb([['🔥 Email Parsa', 'mailto:' + ME.email + '?subject=Hi%20Parsa'], ['🎓 CV', ME.cv]]);
   },
   async help() { await botSay(`<p>Commands: <span class="mono">/about /projects /skills /cv /contact /fun /hire</span></p>`); },
   async unknown(text) {
@@ -260,7 +319,7 @@ const replies = {
   },
 };
 
-const LABELS = { about: '👋 About me', projects: '🚀 Projects', skills: '🛠 Skills', cv: '📄 My CV', contact: '📬 Contact', fun: '🎲 Surprise me', hire: 'hire', help: '/help' };
+const LABELS = { about: '👋 About me', projects: '🚀 Projects', skills: '🛠 Skills', cv: '🎓 My CV', contact: '💬 Contact', fun: '🎲 Surprise me', hire: 'hire', help: '/help' };
 const KEYWORDS = [[/hire|job|work|recruit/, 'hire'], [/project|built|portfolio|github/, 'projects'], [/skill|stack|tech/, 'skills'], [/cv|resume|curr/, 'cv'], [/contact|email|mail|reach/, 'contact'], [/about|who|you/, 'about'], [/fun|joke|surprise|random/, 'fun'], [/help|start|menu/, 'help']];
 
 async function run(cmd, label) {
@@ -306,7 +365,7 @@ viewBtn.addEventListener('click', () => {
   const classic = document.getElementById('classic').classList.toggle('on');
   chat.style.display = classic ? 'none' : '';
   document.getElementById('kb').style.display = classic ? 'none' : '';
-  viewBtn.innerHTML = classic ? '💬 <span class="lbl">chat view</span>' : '📄 <span class="lbl">normal view</span>';
+  viewBtn.innerHTML = classic ? '💬 <span class="lbl">chat view</span>' : '👀 <span class="lbl">normal view</span>'; animoji(viewBtn);
 });
 
 // ---------- theme ----------
@@ -318,6 +377,7 @@ document.getElementById('themeBtn').addEventListener('click', () => {
 });
 
 // ---------- go ----------
+animoji(document.getElementById('kb')); animoji(document.querySelector('.top')); animoji(document.getElementById('classic'));
 chat.innerHTML = `<div class="day">today</div>`;
 replies.start();
 </script>
